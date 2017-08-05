@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Client_mainwindow</class>
+ <widget class="QMainWindow" name="Client_mainwindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Client_mainwindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/icon_image/resource/robot.ico</normaloff>:/icon_image/resource/robot.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 255), stop:0.982955 rgba(255, 213, 162, 255));
+font: 14pt &quot;华文新魏&quot;;</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLineEdit" name="dll_liedit">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>280</y>
+      <width>581</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.489, y1:0.465909, x2:1, y2:1, stop:0.00568182 rgba(255, 235, 235, 0));</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="load_dll_btn">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>350</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文新魏</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>加载策略</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stop_btn">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>350</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文新魏</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>停止</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="openCamera_btn">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>350</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文新魏</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>加载视觉</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>321</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="LeftDeviceDisp_layout">
+     <item>
+      <widget class="QLabel" name="left_cameradisp">
+       <property name="styleSheet">
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0.489, y1:0.465909, x2:1, y2:1, stop:0.00568182 rgba(255, 235, 235, 0));</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>0</y>
+      <width>321</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="RightDeviceDisp_layout">
+     <item>
+      <widget class="QLabel" name="right_cameradisp">
+       <property name="styleSheet">
+        <string notr="true">background-color: qlineargradient(spread:pad, x1:0.489, y1:0.465909, x2:1, y2:1, stop:0.00568182 rgba(255, 235, 235, 0));</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>640</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="connect_menu">
+    <property name="geometry">
+     <rect>
+      <x>339</x>
+      <y>106</y>
+      <width>185</width>
+      <height>102</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>连接设置</string>
+    </property>
+    <addaction name="actioncklj"/>
+    <addaction name="actionfwqlj"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>视觉设置</string>
+    </property>
+    <addaction name="camera_Set"/>
+    <addaction name="pictureSet"/>
+    <addaction name="destination_Set"/>
+   </widget>
+   <addaction name="connect_menu"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actioncklj">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon_image/resource/串口.png</normaloff>:/icon_image/resource/串口.png</iconset>
+   </property>
+   <property name="text">
+    <string>1.连接串口</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;连接串口&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionfwqlj">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon_image/resource/backup_ibm_server.ico</normaloff>:/icon_image/resource/backup_ibm_server.ico</iconset>
+   </property>
+   <property name="text">
+    <string>2.连接服务器</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;连接服务器&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="camera_Set">
+   <property name="text">
+    <string>1.摄像头参数设置</string>
+   </property>
+  </action>
+  <action name="destination_Set">
+   <property name="text">
+    <string>3.目标识别设置</string>
+   </property>
+   <property name="toolTip">
+    <string>3.目标识别设置</string>
+   </property>
+  </action>
+  <action name="pictureSet">
+   <property name="text">
+    <string>2.图像设置</string>
+   </property>
+   <property name="toolTip">
+    <string>2.图像设置</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

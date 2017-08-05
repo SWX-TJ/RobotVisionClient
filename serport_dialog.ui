@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>serport_Dialog</class>
+ <widget class="QDialog" name="serport_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>240</width>
+    <height>369</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/icon_image/resource/robot.ico</normaloff>:/icon_image/resource/robot.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 255), stop:0.982955 rgba(255, 213, 162, 255));
+font: 14pt &quot;华文新魏&quot;;</string>
+  </property>
+  <widget class="QLabel" name="port_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>串口号：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="baund_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>波特率:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="databit_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>数据位：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="stopbit_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>停止位：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="control_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>控制流：</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="port_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>100</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>无</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 3</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 4</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 5</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 6</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 7</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 8</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 9</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 10</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>COM 11</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="baund_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>70</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>9600</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>38400</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>57600</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>115200</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="databit_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>120</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="currentText">
+    <string>6</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>6</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>7</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="stopbit_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>170</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1.5</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="checkbit_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>220</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>None</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>奇</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>偶</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="checkbit_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文新魏</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 0), stop:0.982955 rgba(255, 213, 162, 0));</string>
+   </property>
+   <property name="text">
+    <string>校验位：</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="control_combox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>270</y>
+     <width>80</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>None</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Hardware</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>SoftWare</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="openSerport_btn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>320</y>
+     <width>80</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>打开串口</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="return_btn">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>320</y>
+     <width>80</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>返回</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
