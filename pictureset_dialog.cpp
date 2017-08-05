@@ -37,3 +37,15 @@ void PictureSet_Dialog::on_ReturnBtn_clicked()
 {
          returnSignal(5);
 }
+
+void PictureSet_Dialog::on_contrastSlider_sliderMoved(int position)
+{
+    QString ContrastValue;
+    ui->contrastDisp->setText(ContrastValue.setNum(position));
+}
+
+void PictureSet_Dialog::on_brightSlider_sliderMoved(int position)
+{
+    QString brightValue;
+    ui->brightDisp->setText(brightValue.setNum(position));
+}

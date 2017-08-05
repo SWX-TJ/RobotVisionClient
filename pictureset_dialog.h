@@ -26,6 +26,10 @@ private slots:
     void on_B_channelSlider_sliderMoved(int position);
     void on_ReturnBtn_clicked();
 
+    void on_contrastSlider_sliderMoved(int position);
+
+    void on_brightSlider_sliderMoved(int position);
+
 private:
     Ui::PictureSet_Dialog *ui;
 };

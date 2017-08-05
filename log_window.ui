@@ -24,7 +24,7 @@
     <normaloff>:/icon_image/resource/robot.ico</normaloff>:/icon_image/resource/robot.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: qlineargradient(spread:reflect, x1:0.96, y1:0.062, x2:0.028, y2:0.960773, stop:0 rgba(94, 255, 255, 255), stop:0.880682 rgba(255, 179, 82, 255));</string>
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.199, y1:0.852273, x2:1, y2:0, stop:0 rgba(238, 204, 68, 255), stop:1 rgba(0, 255, 255, 255));</string>
   </property>
   <widget class="QLabel" name="usrname_label">
    <property name="geometry">

@@ -21,7 +21,7 @@
     <normaloff>:/icon_image/resource/robot.ico</normaloff>:/icon_image/resource/robot.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.943, y1:0.193182, x2:0.187, y2:0.818182, stop:0 rgba(85, 255, 255, 255), stop:0.982955 rgba(255, 213, 162, 255));
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.199, y1:0.852273, x2:1, y2:0, stop:0 rgba(238, 204, 68, 255), stop:1 rgba(0, 255, 255, 255));
 font: 14pt &quot;华文新魏&quot;;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
