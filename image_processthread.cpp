@@ -1,12 +1,19 @@
 #include "image_processthread.h"
 #include <QDebug>
 //#include<opencv.hpp>
-//#include <vector>
-//using namespace cv;
+#include <vector>
+#include <iostream>
+using namespace cv;
+using namespace  std;
 Image_processThread::Image_processThread()
 {
     leftCameraIndex = 0;
     rightCameraIndex = 1;
+    R_Gen = 1.0;
+    G_Gen = 1.0;
+    B_Gen = 1.0;
+    AutoWhiteBalance = false;
+
 }
 
 void Image_processThread::accept_leftdeviceIndex(int index)
@@ -34,6 +41,19 @@ void Image_processThread::accept_closeRightCamera()
     m_RightCamera->release();
 }
 
+void Image_processThread::accept_RGBGen(int r, int g, int b)
+{
+    R_Gen += double(r)/100;
+    G_Gen += double(g)/100;
+    B_Gen += double(b)/100;
+    qDebug()<<"R "<<R_Gen<<" G "<<G_Gen<<" B "<< B_Gen<<endl;
+}
+
+void Image_processThread::accept_AutoWhiteBalance()
+{
+    AutoWhiteBalance = true;
+}
+
 QImage Image_processThread::convertMatToQImage(Mat &mat)
 {
     QImage img;
@@ -53,29 +73,79 @@ QImage Image_processThread::convertMatToQImage(Mat &mat)
 
 void Image_processThread::run()
 {
-  //  Mat imageROI;
-   // Mat logo = imread("C:/Users/SWX/Desktop/robot_client/Robot_client/resource/logo.jpg");
+    //  Mat imageROI;
+    // Mat logo = imread("C:/Users/SWX/Desktop/robot_client/Robot_client/resource/logo.jpg");
     waitKey(30);
     switch (deviceNum) {
     case LEFT_CAMERA:
         m_leftCamera = new VideoCapture(leftCameraIndex);
         while(1)
         {
-             Mat frame,dst_frame,resize_frame;
-            m_leftCamera->operator >>(frame);
-            /**********/
-            //TODO opencv to qt显示
-            dst_frame = frame.clone();
-            resize(dst_frame,resize_frame,Size(320,240));
-            left_frame = convertMatToQImage(resize_frame);
-            send_leftdispframe(left_frame);
-            /**********/
-            /**********/
-             //TODO 图像处理区域
+            if(!AutoWhiteBalance)
+            {
+                Mat frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                m_leftCamera->operator >>(frame);
+                /**/
+                //TODO 图像处理区域
+                split(frame,imageBGR);
+                imageBGR[0] = imageBGR[0]*B_Gen;
+                imageBGR[1] = imageBGR[1]*G_Gen;
+                imageBGR[2] = imageBGR[2]*R_Gen;
+                merge(imageBGR,frame);
+                /**/
+                /**********/
+                //TODO opencv to qt显示
 
-            /**********/
-            imshow("left_video",frame);
-            waitKey(30);
+                dst_frame = frame.clone();
+                resize(dst_frame,resize_frame,Size(320,240));
+                left_frame = convertMatToQImage(resize_frame);
+                send_leftdispframe(left_frame);
+                /**********/
+                /**********/
+                //TODO 图像测试处理区域
+
+
+                /**********/
+                imshow("left_video",frame);
+                waitKey(30);
+            }
+            else
+            {
+               // AutoWhiteBalance = !AutoWhiteBalance;
+                Mat frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                m_leftCamera->operator >>(frame);
+                /**/
+                //TODO 图像处理区域
+                split(frame,imageBGR);
+                double R_BalanceValue, G_BalanceValue, B_BalanceValue;
+                B_BalanceValue = mean(imageBGR[0])[0];
+                G_BalanceValue = mean(imageBGR[1])[0];
+                R_BalanceValue = mean(imageBGR[2])[0];
+                double KR, KG, KB;
+                   KB = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * B_BalanceValue);
+                   KG = (R_BalanceValue + G_BalanceValue+ B_BalanceValue) / (3 * G_BalanceValue);
+                   KR = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * R_BalanceValue);
+                   imageBGR[0] = imageBGR[0]*KB;
+                   imageBGR[1] = imageBGR[1]*KG;
+                   imageBGR[2] = imageBGR[2]*KR;
+                   merge(imageBGR,frame);
+                /**/
+                /**********/
+                //TODO opencv to qt显示
+
+                dst_frame = frame.clone();
+                resize(dst_frame,resize_frame,Size(320,240));
+                left_frame = convertMatToQImage(resize_frame);
+                send_leftdispframe(left_frame);
+                /**********/
+                /**********/
+                //TODO 图像测试处理区域
+
+
+                /**********/
+                imshow("left_video",frame);
+                waitKey(30);
+            }
         }
         break;
     case RIGHT_CAMERA:
@@ -108,10 +178,10 @@ void Image_processThread::run()
             right_frame = convertMatToQImage(right_resize_frame);
             send_alldispframe(left_frame,right_frame);
             /**********/
-             //TODO 图像处理区域
-    //addWeighted(left_ori_frame,0.8,right_ori_frame,0.2,0,mix_frame);
+            //TODO 图像处理区域
+            //addWeighted(left_ori_frame,0.8,right_ori_frame,0.2,0,mix_frame);
             /**********/
-             imshow("mix_frame",mix_frame);
+            imshow("mix_frame",mix_frame);
             //imshow("right_video",right_ori_frame);
             waitKey(30);
         }

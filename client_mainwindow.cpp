@@ -31,6 +31,8 @@ Client_mainwindow::Client_mainwindow(QWidget *parent) :
     connect(m_camset,SIGNAL(send_leftdeviceIndex(int)),m_image_thread,SLOT(accept_leftdeviceIndex(int)));
     connect(m_camset,SIGNAL(send_rightdeviceIndex(int)),m_image_thread,SLOT(accept_rightdeviceIndex(int)));
     connect(m_camset,SIGNAL(send_UseCameraNum(int)),m_image_thread,SLOT(accept_deviceNum(int)));
+    connect(m_pictureSet,SIGNAL(send_RGBGen(int,int,int)),m_image_thread,SLOT(accept_RGBGen(int,int,int)));
+    connect(m_pictureSet,SIGNAL(sendSignalAutoWhiteBalance()),m_image_thread,SLOT(accept_AutoWhiteBalance()));
 }
 
 Client_mainwindow::~Client_mainwindow()
@@ -82,15 +84,16 @@ void Client_mainwindow::on_openCamera_btn_clicked()
         switch (UseWhichCamera) {
         case LEFT_CAMERA:
             m_image_thread->start();
-               ui->openCamera_btn->setText("关闭视觉");
+
+            ui->openCamera_btn->setText("关闭视觉");
             break;
         case RIGHT_CAMERA:
             m_image_thread->start();
-               ui->openCamera_btn->setText("关闭视觉");
+            ui->openCamera_btn->setText("关闭视觉");
             break;
         case ALL_CAMERA:
             m_image_thread->start();
-               ui->openCamera_btn->setText("关闭视觉");
+            ui->openCamera_btn->setText("关闭视觉");
             break;
         default:
             QMessageBox::information(this,"摄像头加载","没有摄像头设备或者没有设置摄像头");
@@ -106,20 +109,20 @@ void Client_mainwindow::on_openCamera_btn_clicked()
             emit close_leftCamera();
             m_image_thread->terminate();
             m_image_thread->wait();
-             ui->openCamera_btn->setText("加载视觉");
+            ui->openCamera_btn->setText("加载视觉");
             break;
         case RIGHT_CAMERA:
             emit close_rightCamera();
             m_image_thread->terminate();
             m_image_thread->wait();
-             ui->openCamera_btn->setText("加载视觉");
+            ui->openCamera_btn->setText("加载视觉");
             break;
         case ALL_CAMERA:
             emit close_leftCamera();
             emit close_rightCamera();
             m_image_thread->terminate();
             m_image_thread->wait();
-             ui->openCamera_btn->setText("加载视觉");
+            ui->openCamera_btn->setText("加载视觉");
             break;
         default:
             QMessageBox::information(this,"关闭视觉","摄像头关闭错误，请重新关闭或者结束进程");
@@ -184,7 +187,7 @@ void Client_mainwindow::accept_alldispFrame(QImage left_frame, QImage right_fram
 }
 void Client_mainwindow::on_destination_Set_triggered()
 {
-     m_goalDetect->show();
+    m_goalDetect->show();
 }
 
 void Client_mainwindow::on_pictureSet_triggered()

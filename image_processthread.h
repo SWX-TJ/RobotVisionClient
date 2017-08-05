@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QImage>
 #include <opencv.hpp>
+#include <vector>
 #define LEFT_CAMERA  1
 #define RIGHT_CAMERA 2
 #define ALL_CAMERA   3
@@ -18,6 +19,10 @@ public:
    int leftCameraIndex;//左相机设备索引
    int rightCameraIndex;//右相机设备索引
    int deviceNum;//相机使用计数，单目or双目
+   double R_Gen;//R通道增益
+   double G_Gen;//G通道增益
+   double B_Gen;//B通道增益
+   bool AutoWhiteBalance;
    VideoCapture *m_leftCamera;
    VideoCapture *m_RightCamera;
    QImage left_frame;
@@ -33,6 +38,8 @@ public slots:
    void accept_deviceNum(int);
    void accept_closeLeftCamera();
    void accept_closeRightCamera();
+   void accept_RGBGen(int,int,int);
+   void accept_AutoWhiteBalance();
 public:
    QImage convertMatToQImage(Mat &mat);
 protected:
