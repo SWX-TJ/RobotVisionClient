@@ -129,49 +129,21 @@ void Image_processThread::run()
                 //TODO opencv to qt显示
 
                 dst_frame = bilater_frame.clone();
-                resize(dst_frame,resize_frame,Size(320,240));
+                resize(dst_frame,resize_frame,Size(320,240),CV_INTER_AREA);
                 left_frame = convertMatToQImage(resize_frame);
                 send_leftdispframe(left_frame);
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
-
-//               Mat bilater_frame,gray_frame;
-//             //  boxFilter(preset_frame,BoxFliter_frame,-1,Size(5,5),Point(1,0));
-//               bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
-//               cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
-//               int m = getOptimalDFTSize(gray_frame.rows);
-//               int n = getOptimalDFTSize(gray_frame.cols);
-//               Mat padded;
-//               copyMakeBorder(gray_frame,padded,0,m-gray_frame.rows,0,n-gray_frame.cols,BORDER_CONSTANT,Scalar::all(0));
-//               Mat planes[] = {Mat_<float>(padded),Mat::zeros(padded.size(),CV_32F)};
-//               Mat complexI;
-//               merge(planes,2,complexI);
-//               dft(complexI,complexI);
-//               split(complexI,planes);
-//               magnitude(planes[0],planes[1],planes[0]);
-//               Mat magnitudeImage = planes[0];
-//               magnitudeImage +=Scalar::all(1);
-//               log(magnitudeImage,magnitudeImage);
-//               magnitudeImage = magnitudeImage(Rect(0,0,magnitudeImage.cols & -2,magnitudeImage.rows & -2));
-//               int cx = magnitudeImage.cols/2;
-//               int cy = magnitudeImage.rows/2;
-//               Mat q0(magnitudeImage,Rect(0,0,cx,cy));
-//               Mat q1(magnitudeImage,Rect(cx,0,cx,cy));
-//               Mat q2(magnitudeImage,Rect(0,cy,cx,cy));
-//               Mat q3(magnitudeImage,Rect(cx,cy,cx,cy));
-//               Mat tmp;
-//               q0.copyTo(tmp);
-//               q3.copyTo(q0);
-//               tmp.copyTo(q3);
-//               q1.copyTo(tmp);
-//               q2.copyTo(q1);
-//               tmp.copyTo(q2);
-//               normalize(magnitudeImage,magnitudeImage,0,1,NORM_MINMAX);
-//               imshow("频谱幅值",magnitudeImage);
+          Mat open_frame,Mat_Kernel;
+          Mat_Kernel = getStructuringElement(MORPH_RECT,Size(9,9));
+          morphologyEx(bilater_frame,open_frame,MORPH_GRADIENT,Mat_Kernel);
+         // erode(bilater_frame,erode_frame,Mat_Kernel);
+          //dilate(erode_frame,dilate_frame,Mat_Kernel);
                /**********/
                 imshow("left_video",bilater_frame);
-               // imshow("bilater_fliter",bilater_frame);
+               // imshow("dilate_frame",dilate_frame);
+                imshow("open_frame",open_frame);
                 waitKey(30);
             }
             else
@@ -205,7 +177,7 @@ void Image_processThread::run()
                 //TODO opencv to qt显示
 
                 dst_frame = bilater_frame.clone();
-                resize(dst_frame,resize_frame,Size(320,240));
+                resize(dst_frame,resize_frame,Size(320,240),CV_INTER_AREA);
                 left_frame = convertMatToQImage(resize_frame);
                 send_leftdispframe(left_frame);
                 /**********/
@@ -226,7 +198,7 @@ void Image_processThread::run()
             Mat frame,dst_frame,resize_frame;
             m_RightCamera->operator >>(frame);
             dst_frame = frame.clone();
-            resize(dst_frame,resize_frame,Size(320,240));
+            resize(dst_frame,resize_frame,Size(320,240),CV_INTER_AREA);
             right_frame = convertMatToQImage(resize_frame);
             send_rightdispframe(right_frame);
             imshow("right_video",frame);
@@ -244,8 +216,8 @@ void Image_processThread::run()
             m_RightCamera->operator >>(right_ori_frame);
             left_dst_frame = left_ori_frame.clone();
             right_dst_frame = right_ori_frame.clone();
-            resize(left_dst_frame,left_resize_frame,Size(320,240));
-            resize(right_dst_frame,right_resize_frame,Size(320,240));
+            resize(left_dst_frame,left_resize_frame,Size(320,240),CV_INTER_AREA);
+            resize(right_dst_frame,right_resize_frame,Size(320,240),CV_INTER_AREA);
             left_frame = convertMatToQImage(left_resize_frame);
             right_frame = convertMatToQImage(right_resize_frame);
             send_alldispframe(left_frame,right_frame);
