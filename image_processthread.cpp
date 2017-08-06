@@ -12,6 +12,8 @@ Image_processThread::Image_processThread()
     R_Gen = 1.0;
     G_Gen = 1.0;
     B_Gen = 1.0;
+    Contrast_Gen = 100;
+    Bright_Gen = 0;
     AutoWhiteBalance = false;
 
 }
@@ -46,7 +48,13 @@ void Image_processThread::accept_RGBGen(int r, int g, int b)
     R_Gen += double(r)/100;
     G_Gen += double(g)/100;
     B_Gen += double(b)/100;
-    qDebug()<<"R "<<R_Gen<<" G "<<G_Gen<<" B "<< B_Gen<<endl;
+}
+
+void Image_processThread::accept_ContrastBrightGen(int contrast, int bright)
+{
+    Contrast_Gen += contrast;
+    Bright_Gen   += bright;
+   // qDebug()<<"Contrast_Gen"<<Contrast_Gen<<" Bright_Gen "<<Bright_Gen<<endl;
 }
 
 void Image_processThread::accept_AutoWhiteBalance()
@@ -71,6 +79,26 @@ QImage Image_processThread::convertMatToQImage(Mat &mat)
     return img;
 }
 
+Mat Image_processThread::contrastAndBrightSet(Mat &frame, int contrastValue, int BrightValue)
+{
+    Mat preset_frame;
+     preset_frame = frame.clone();
+    for(int y =0;y<frame.rows;y++)
+    {
+        for(int x =0;x<frame.cols;x++)
+        {
+            for(int c=0;c<3;c++)
+            {
+                 preset_frame.at<Vec3b>(y,x)[c] = saturate_cast<uchar>((contrastValue*0.01)*frame.at<Vec3b>(y,x)[c]+BrightValue);
+            }
+        }
+    }
+
+    return preset_frame;
+}
+
+
+
 void Image_processThread::run()
 {
     //  Mat imageROI;
@@ -83,7 +111,7 @@ void Image_processThread::run()
         {
             if(!AutoWhiteBalance)
             {
-                Mat frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                Mat frame,preset_frame,dst_frame,resize_frame;vector<Mat>imageBGR;
                 m_leftCamera->operator >>(frame);
                 /**/
                 //TODO 图像处理区域
@@ -92,11 +120,12 @@ void Image_processThread::run()
                 imageBGR[1] = imageBGR[1]*G_Gen;
                 imageBGR[2] = imageBGR[2]*R_Gen;
                 merge(imageBGR,frame);
+                preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
                 /**/
                 /**********/
                 //TODO opencv to qt显示
 
-                dst_frame = frame.clone();
+                dst_frame = preset_frame.clone();
                 resize(dst_frame,resize_frame,Size(320,240));
                 left_frame = convertMatToQImage(resize_frame);
                 send_leftdispframe(left_frame);
@@ -106,13 +135,13 @@ void Image_processThread::run()
 
 
                 /**********/
-                imshow("left_video",frame);
+                imshow("left_video",preset_frame);
                 waitKey(30);
             }
             else
             {
-               // AutoWhiteBalance = !AutoWhiteBalance;
-                Mat frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                 AutoWhiteBalance = !AutoWhiteBalance;
+                Mat frame,preset_frame,dst_frame,resize_frame;vector<Mat>imageBGR;
                 m_leftCamera->operator >>(frame);
                 /**/
                 //TODO 图像处理区域
@@ -122,18 +151,22 @@ void Image_processThread::run()
                 G_BalanceValue = mean(imageBGR[1])[0];
                 R_BalanceValue = mean(imageBGR[2])[0];
                 double KR, KG, KB;
-                   KB = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * B_BalanceValue);
-                   KG = (R_BalanceValue + G_BalanceValue+ B_BalanceValue) / (3 * G_BalanceValue);
-                   KR = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * R_BalanceValue);
-                   imageBGR[0] = imageBGR[0]*KB;
-                   imageBGR[1] = imageBGR[1]*KG;
-                   imageBGR[2] = imageBGR[2]*KR;
-                   merge(imageBGR,frame);
+                KB = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * B_BalanceValue);
+                KG = (R_BalanceValue + G_BalanceValue+ B_BalanceValue) / (3 * G_BalanceValue);
+                KR = (R_BalanceValue + G_BalanceValue + B_BalanceValue) / (3 * R_BalanceValue);
+                R_Gen =  KR;
+                G_Gen =  KG;
+                B_Gen =  KB;
+                imageBGR[0] = imageBGR[0]*KB;
+                imageBGR[1] = imageBGR[1]*KG;
+                imageBGR[2] = imageBGR[2]*KR;
+                merge(imageBGR,frame);
+                 preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
                 /**/
                 /**********/
                 //TODO opencv to qt显示
 
-                dst_frame = frame.clone();
+                dst_frame =  preset_frame.clone();
                 resize(dst_frame,resize_frame,Size(320,240));
                 left_frame = convertMatToQImage(resize_frame);
                 send_leftdispframe(left_frame);
@@ -143,7 +176,7 @@ void Image_processThread::run()
 
 
                 /**********/
-                imshow("left_video",frame);
+                imshow("left_video", preset_frame);
                 waitKey(30);
             }
         }
@@ -160,6 +193,7 @@ void Image_processThread::run()
             send_rightdispframe(right_frame);
             imshow("right_video",frame);
             waitKey(30);
+
         }
         break;
     case ALL_CAMERA:

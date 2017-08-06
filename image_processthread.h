@@ -22,6 +22,8 @@ public:
    double R_Gen;//R通道增益
    double G_Gen;//G通道增益
    double B_Gen;//B通道增益
+   int Contrast_Gen;
+   int Bright_Gen;
    bool AutoWhiteBalance;
    VideoCapture *m_leftCamera;
    VideoCapture *m_RightCamera;
@@ -39,9 +41,11 @@ public slots:
    void accept_closeLeftCamera();
    void accept_closeRightCamera();
    void accept_RGBGen(int,int,int);
+   void accept_ContrastBrightGen(int,int);
    void accept_AutoWhiteBalance();
 public:
    QImage convertMatToQImage(Mat &mat);
+   Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);
 protected:
     void run();
 };

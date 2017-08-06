@@ -24,8 +24,14 @@ public:
     int r_SendChannelValue;//r_发送值
     int g_SendChannelValue;//g_发送值
     int b_SendChannelValue;//b_发送值
-    int contrastValue;
-    int brightValue;
+    int contrastValue;//对比度滑动条当前值
+    int brightValue;//亮度值滑动条当前值
+    int contrast_LastValue;//对比度滑动条上一次值
+    int bright_LastValue;//亮度滑动条上一次值
+    int contrast_SendValue;//对比度发送值
+    int bright_SendValue;//亮度发送值
+    bool contrast_Enable;//对比度滑动条触发状态变量
+    bool bright_Enable;//亮度滑动条触发状态变量
     bool r_sliderEnable;//r_通道滑动条触发状态变量
     bool g_sliderEnable;//g_通道滑动条触发状态变量
     bool b_sliderEnable;//b_通道滑动条触发状态变量
@@ -33,6 +39,7 @@ signals:
     void returnSignal(int);
     void sendSignalAutoWhiteBalance();
     void send_RGBGen(int,int,int);
+    void send_ContrastAndBright(int,int);
 private slots:
     void on_R_channelSlider_sliderMoved(int position);
     void on_G_channerlSlider_sliderMoved(int position);

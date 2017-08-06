@@ -33,6 +33,7 @@ Client_mainwindow::Client_mainwindow(QWidget *parent) :
     connect(m_camset,SIGNAL(send_UseCameraNum(int)),m_image_thread,SLOT(accept_deviceNum(int)));
     connect(m_pictureSet,SIGNAL(send_RGBGen(int,int,int)),m_image_thread,SLOT(accept_RGBGen(int,int,int)));
     connect(m_pictureSet,SIGNAL(sendSignalAutoWhiteBalance()),m_image_thread,SLOT(accept_AutoWhiteBalance()));
+    connect(m_pictureSet,SIGNAL(send_ContrastAndBright(int,int)),m_image_thread,SLOT(accept_ContrastBrightGen(int,int)));
 }
 
 Client_mainwindow::~Client_mainwindow()
