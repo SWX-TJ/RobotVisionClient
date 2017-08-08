@@ -46,6 +46,8 @@ public slots:
 public:
    QImage convertMatToQImage(Mat &mat);
    Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);
+   int OSTU_Threshold(Mat &frame);//OSUT找全局最优阈值为后面的二值化处理做预备
+   void PaintHist(Mat &gray_frame);//灰度直方图绘制
 protected:
     void run();
 };
