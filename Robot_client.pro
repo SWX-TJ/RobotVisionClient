@@ -34,7 +34,9 @@ SOURCES += \
     camerasetting_dialog.cpp \
     calibrationsinglecamera.cpp \
     goaldetection_dialog.cpp \
-    pictureset_dialog.cpp
+    pictureset_dialog.cpp \
+    roadrobotmodesetwidget.cpp \
+    basketballrobotmodesetwidget.cpp
 
 HEADERS += \
         client_mainwindow.h \
@@ -47,7 +49,9 @@ HEADERS += \
     camerasetting_dialog.h \
     calibrationsinglecamera.h \
     goaldetection_dialog.h \
-    pictureset_dialog.h
+    pictureset_dialog.h \
+    roadrobotmodesetwidget.h \
+    basketballrobotmodesetwidget.h
 
 FORMS += \
         client_mainwindow.ui \
@@ -58,7 +62,9 @@ FORMS += \
     camerasetting_dialog.ui \
     calibrationsinglecamera.ui \
     goaldetection_dialog.ui \
-    pictureset_dialog.ui
+    pictureset_dialog.ui \
+    roadrobotmodesetwidget.ui \
+    basketballrobotmodesetwidget.ui
 
 RESOURCES += \
     resource.qrc

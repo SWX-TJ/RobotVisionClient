@@ -13,18 +13,118 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0.136, y1:0.892, x2:0.920455, y2:0.074, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(0, 0, 177, 255));</string>
+  </property>
   <widget class="QPushButton" name="returnBtn">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>260</y>
+     <x>10</x>
+     <y>250</y>
      <width>80</width>
      <height>30</height>
     </rect>
    </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文楷体</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>返回</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>141</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文楷体</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="title">
+    <string>模式选择</string>
+   </property>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>华文楷体</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>1.竞走机器人</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2.投篮机器人</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3.足球机器人</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4.其他</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="SetBtn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>80</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>华文楷体</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>确认设置</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>0</y>
+     <width>251</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <resources/>

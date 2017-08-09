@@ -48,6 +48,7 @@ public:
    Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);
    int OSTU_Threshold(Mat &frame);//OSUT找全局最优阈值为后面的二值化处理做预备
    void PaintHist(Mat &gray_frame);//灰度直方图绘制
+   Mat LineDetect(Mat &bilater_frame);
 protected:
     void run();
 };

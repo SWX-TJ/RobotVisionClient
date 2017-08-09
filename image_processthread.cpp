@@ -171,6 +171,29 @@ void Image_processThread::PaintHist(Mat &gray_frame)
     imshow("hist_frame",hist_frame);
 }
 
+Mat Image_processThread::LineDetect(Mat &bilater_frame)
+{
+
+    int ostu_threshlodValue;//自适应阈值
+    Mat gray_frame,binary_frame,canny_frame;
+    // Mat_Kernel = bilater_frame.clone();
+    cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
+    //PaintHist(gray_frame);
+    ostu_threshlodValue = OSTU_Threshold(gray_frame);
+    threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
+    Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
+        vector<Vec4i> lines;
+        HoughLinesP(canny_frame,lines,1,CV_PI/180, 0,50,10);
+        cout << "line num" << lines.size() << endl;
+        for (size_t i = 0; i < lines.size(); i++)
+        {
+
+            Vec4i l = lines[i];
+            line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
+        }
+        return bilater_frame;
+}
+
 
 
 void Image_processThread::run()
@@ -198,24 +221,8 @@ void Image_processThread::run()
                 preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
                 //双边滤波器
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
-                //OSTU
-                int ostu_threshlodValue;//自适应阈值
-                Mat gray_frame,binary_frame,canny_frame;
-                // Mat_Kernel = bilater_frame.clone();
-                cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
-                //PaintHist(gray_frame);
-                ostu_threshlodValue = OSTU_Threshold(gray_frame);
-                threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
-                Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
-                    vector<Vec4i> lines;
-                    HoughLinesP(canny_frame,lines,1,CV_PI/180, 0,50,10);
-                    cout << "line num" << lines.size() << endl;
-                    for (size_t i = 0; i < lines.size(); i++)
-                    {
-
-                        Vec4i l = lines[i];
-                        line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
-                    }
+                //直线检测
+                bilater_frame = LineDetect(bilater_frame);
                 /**/
                 /**********/
                 //TODO opencv to qt显示

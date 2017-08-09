@@ -18,7 +18,6 @@ signals:
     void returnSignal(int);
 private slots:
     void on_returnBtn_clicked();
-
 private:
     Ui::CalibrationSingleCamera *ui;
 };
