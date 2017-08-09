@@ -198,6 +198,24 @@ void Image_processThread::run()
                 preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
                 //双边滤波器
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
+                //OSTU
+                int ostu_threshlodValue;//自适应阈值
+                Mat gray_frame,binary_frame,canny_frame;
+                // Mat_Kernel = bilater_frame.clone();
+                cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
+                //PaintHist(gray_frame);
+                ostu_threshlodValue = OSTU_Threshold(gray_frame);
+                threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
+                Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
+                    vector<Vec4i> lines;
+                    HoughLinesP(canny_frame,lines,1,CV_PI/180, 0,50,10);
+                    cout << "line num" << lines.size() << endl;
+                    for (size_t i = 0; i < lines.size(); i++)
+                    {
+
+                        Vec4i l = lines[i];
+                        line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
+                    }
                 /**/
                 /**********/
                 //TODO opencv to qt显示
@@ -209,17 +227,8 @@ void Image_processThread::run()
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
-                int ostu_threshlodValue;//自适应阈值
-                Mat binary_frame,canny_frame;
-                // Mat_Kernel = bilater_frame.clone();
-                cvtColor(bilater_frame,bilater_frame,COLOR_BGR2GRAY);
-                PaintHist(bilater_frame);
-                ostu_threshlodValue = OSTU_Threshold(bilater_frame);
-                threshold(bilater_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
-                Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
                 /**********/
-                imshow("left_video",binary_frame);
-                imshow("canny_frame",canny_frame);
+                imshow("left_video",bilater_frame);
                 waitKey(30);
             }
             else
@@ -299,7 +308,7 @@ void Image_processThread::run()
             send_alldispframe(left_frame,right_frame);
             /**********/
             //TODO 图像处理区域
-            //addWeighted(left_ori_frame,0.8,right_ori_frame,0.2,0,mix_frame);
+            addWeighted(left_ori_frame,0.8,right_ori_frame,0.2,0,mix_frame);
             /**********/
             imshow("mix_frame",mix_frame);
             //imshow("right_video",right_ori_frame);
