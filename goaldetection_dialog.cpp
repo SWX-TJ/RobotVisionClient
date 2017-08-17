@@ -38,7 +38,7 @@ void GoalDetection_Dialog::on_comboBox_currentIndexChanged(int index)
     case Mode_BastBallRobot:
         ui->verticalLayout->removeWidget(returnCurrentWidget(currentWidget));
         ui->verticalLayout->addWidget(m_basketBallRobot);
-       currentWidget = m_basketBallRobot->objectName();
+        currentWidget = m_basketBallRobot->objectName();
         break;
     default:
         break;
@@ -55,4 +55,5 @@ QWidget* GoalDetection_Dialog::returnCurrentWidget(QString currentWidgetName)
   {
       return m_basketBallRobot;
   }
+  return NULL;
 }
