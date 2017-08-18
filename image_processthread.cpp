@@ -1,6 +1,5 @@
 #include "image_processthread.h"
 #include <QDebug>
-//#include<opencv.hpp>
 #include <vector>
 #include <iostream>
 using namespace cv;
@@ -54,7 +53,6 @@ void Image_processThread::accept_ContrastBrightGen(int contrast, int bright)
 {
     Contrast_Gen += contrast;
     Bright_Gen   += bright;
-    // qDebug()<<"Contrast_Gen"<<Contrast_Gen<<" Bright_Gen "<<Bright_Gen<<endl;
 }
 
 void Image_processThread::accept_AutoWhiteBalance()
@@ -71,9 +69,13 @@ QImage Image_processThread::convertMatToQImage(Mat &mat)
         cvtColor(mat,mat,CV_BGR2RGB);
         img = QImage((const unsigned char*)mat.data,mat.cols,mat.rows,QImage::Format_RGB888);
     }
-    else if(nChannel==4||nChannel==1)
+    else if(nChannel==4)
     {
         img = QImage((const unsigned char*)mat.data,mat.cols,mat.rows,QImage::Format_ARGB32);
+    }
+    else if(nChannel==1)
+    {
+                img = QImage((const unsigned char*)mat.data,mat.cols,mat.rows,QImage::Format_Indexed8);
     }
 
     return img;
@@ -125,8 +127,8 @@ int Image_processThread::OSTU_Threshold(Mat &frame)
         int j = 0;
         for (; j <= t; j++)
         {
-            average1 +=j*GrayArray[j];
-            count += GrayArray[j];
+            average1 += j*GrayArray[j];
+            count    += GrayArray[j];
         }
         average1 = average1 / count;
         probability1 = count / (frame.cols*frame.rows);
@@ -171,35 +173,34 @@ void Image_processThread::PaintHist(Mat &gray_frame)
     imshow("hist_frame",hist_frame);
 }
 
-Mat Image_processThread::LineDetect(Mat &bilater_frame)
+Mat Image_processThread::LineDetect(Mat &binary_frame,Mat &bilater_frame)
 {
-
-    int ostu_threshlodValue;//自适应阈值
-    Mat gray_frame,binary_frame,canny_frame;
-    // Mat_Kernel = bilater_frame.clone();
-    cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
-    //PaintHist(gray_frame);
-    ostu_threshlodValue = OSTU_Threshold(gray_frame);
-    threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
-    Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
+    Mat canny_frame;
+        Canny(binary_frame,canny_frame,ostu_threshlodValue,ostu_threshlodValue*3,3);
         vector<Vec4i> lines;
         HoughLinesP(canny_frame,lines,1,CV_PI/180, 0,50,10);
         cout << "line num" << lines.size() << endl;
         for (size_t i = 0; i < lines.size(); i++)
         {
-
             Vec4i l = lines[i];
             line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
         }
         return bilater_frame;
 }
 
+Mat Image_processThread::ThresholdProcess(Mat &bilater_frame)
+{
+    Mat gray_frame,binary_frame;
+    cvtColor(bilater_frame,gray_frame,COLOR_BGR2GRAY);
+    ostu_threshlodValue = OSTU_Threshold(gray_frame);
+    threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
+    return binary_frame;
+}
+
 
 
 void Image_processThread::run()
 {
-    //  Mat imageROI;
-    // Mat logo = imread("C:/Users/SWX/Desktop/robot_client/Robot_client/resource/logo.jpg");
     waitKey(30);
     switch (deviceNum) {
     case LEFT_CAMERA:
@@ -209,7 +210,7 @@ void Image_processThread::run()
             if(!AutoWhiteBalance)
             {
 
-                Mat frame,preset_frame,bilater_frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                Mat frame,preset_frame,bilater_frame,binary_frame,dst_frame,binary_dst_frame,resize_frame,resize_binary_frame;vector<Mat>imageBGR;
                 m_leftCamera->operator >>(frame);
                 /**/
                 //TODO 图像处理区域
@@ -221,19 +222,25 @@ void Image_processThread::run()
                 preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
                 //双边滤波器
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
+                //阈值灰度二值化处理
+                binary_frame = ThresholdProcess(bilater_frame);
                 //直线检测
-                bilater_frame = LineDetect(bilater_frame);
+                bilater_frame = LineDetect(binary_frame,bilater_frame);
                 /**/
                 /**********/
                 //TODO opencv to qt显示
-
                 dst_frame = bilater_frame.clone();
+                binary_dst_frame = binary_frame.clone();
                 resize(dst_frame,resize_frame,Size(320,240),CV_INTER_AREA);
-                left_frame = convertMatToQImage(resize_frame);
+                resize(binary_dst_frame,resize_binary_frame,Size(320,240),CV_INTER_AREA);
+                left_frame  = convertMatToQImage(resize_frame);
+                right_frame = convertMatToQImage(resize_binary_frame);
                 send_leftdispframe(left_frame);
+                send_rightdispframe(right_frame);
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
+
                 /**********/
                 imshow("left_video",bilater_frame);
                 waitKey(30);
@@ -241,7 +248,8 @@ void Image_processThread::run()
             else
             {
                 AutoWhiteBalance = !AutoWhiteBalance;
-                Mat frame,preset_frame,bilater_frame,dst_frame,resize_frame;vector<Mat>imageBGR;
+                Mat frame,preset_frame,bilater_frame,binary_frame,dst_frame,binary_dst_frame,resize_frame,resize_binary_frame;
+                vector<Mat>imageBGR;
                 m_leftCamera->operator >>(frame);
                 /**/
                 //TODO 图像处理区域
@@ -262,23 +270,28 @@ void Image_processThread::run()
                 imageBGR[2] = imageBGR[2]*KR;
                 merge(imageBGR,frame);
                 preset_frame= contrastAndBrightSet(frame,Contrast_Gen,Bright_Gen);
-                //双边滤波器
+                //双边滤波检测
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
+               //阈值灰度二值化处理
+                binary_frame = ThresholdProcess(bilater_frame);
+                //直线检测
+                bilater_frame = LineDetect(binary_frame,bilater_frame);
                 /**/
                 /**********/
                 //TODO opencv to qt显示
-
                 dst_frame = bilater_frame.clone();
+                binary_dst_frame = binary_frame.clone();
                 resize(dst_frame,resize_frame,Size(320,240),CV_INTER_AREA);
-                left_frame = convertMatToQImage(resize_frame);
+                resize(binary_dst_frame,resize_binary_frame,Size(320,240),CV_INTER_AREA);
+                left_frame  = convertMatToQImage(resize_frame);
+                right_frame = convertMatToQImage(resize_binary_frame);
                 send_leftdispframe(left_frame);
+                send_rightdispframe(right_frame);
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
-
-
                 /**********/
-                imshow("left_video", bilater_frame);
+                imshow("left_video",bilater_frame);
                 waitKey(30);
             }
         }
@@ -318,7 +331,6 @@ void Image_processThread::run()
             addWeighted(left_ori_frame,0.8,right_ori_frame,0.2,0,mix_frame);
             /**********/
             imshow("mix_frame",mix_frame);
-            //imshow("right_video",right_ori_frame);
             waitKey(30);
         }
         break;

@@ -24,6 +24,7 @@ public:
    double B_Gen;//B通道增益
    int Contrast_Gen;
    int Bright_Gen;
+   int ostu_threshlodValue;//自适应阈值
    bool AutoWhiteBalance;
    VideoCapture *m_leftCamera;
    VideoCapture *m_RightCamera;
@@ -46,9 +47,10 @@ public slots:
 public:
    QImage convertMatToQImage(Mat &mat);
    Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);
-   int OSTU_Threshold(Mat &frame);//OSUT找全局最优阈值为后面的二值化处理做预备
-   void PaintHist(Mat &gray_frame);//灰度直方图绘制
-   Mat LineDetect(Mat &bilater_frame);
+   int    OSTU_Threshold(Mat &frame);//OSUT找全局最优阈值为后面的二值化处理做预备
+   void   PaintHist(Mat &gray_frame);//灰度直方图绘制
+   Mat    LineDetect(Mat &binary_frame,Mat &bilater_frame);//直线检测
+   Mat    ThresholdProcess(Mat &bilater_frame);
 protected:
     void run();
 };

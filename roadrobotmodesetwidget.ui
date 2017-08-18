@@ -16,30 +16,30 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>90</y>
-     <width>151</width>
-     <height>41</height>
+     <x>10</x>
+     <y>50</y>
+     <width>131</width>
+     <height>31</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::WinPanel</enum>
+   <property name="font">
+    <font>
+     <family>华文楷体</family>
+     <pointsize>14</pointsize>
+    </font>
    </property>
    <property name="text">
-    <string/>
+    <string>道路分割阈值：</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QLineEdit" name="ThresholdValue">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>210</y>
-     <width>75</width>
-     <height>23</height>
+     <x>130</x>
+     <y>49</y>
+     <width>100</width>
+     <height>30</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
    </property>
   </widget>
  </widget>
