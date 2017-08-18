@@ -44,6 +44,7 @@ public slots:
    void accept_RGBGen(int,int,int);
    void accept_ContrastBrightGen(int,int);
    void accept_AutoWhiteBalance();
+   void accept_RobotMode(int);
 public:
    QImage convertMatToQImage(Mat &mat);
    Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);

@@ -19,6 +19,7 @@ Client_mainwindow::Client_mainwindow(QWidget *parent) :
     m_pictureSet       = new PictureSet_Dialog;
     connect(m_pictureSet,SIGNAL(returnSignal(int)),this,SLOT(shutSlaveWindowSlot(int)));
     connect(m_goalDetect,SIGNAL(returnSignal(int)),this,SLOT(shutSlaveWindowSlot(int)));
+    connect(m_goalDetect,SIGNAL(send_RobotMode(int)),m_image_thread,SLOT(accept_RobotMode(int)));
     connect(this,SIGNAL(close_leftCamera()),m_image_thread,SLOT(accept_closeLeftCamera()));
     connect(this,SIGNAL(close_rightCamera()),m_image_thread,SLOT(accept_closeRightCamera()));
     connect(m_image_thread,SIGNAL(send_alldispframe(QImage,QImage)),this,SLOT(accept_alldispFrame(QImage,QImage)));

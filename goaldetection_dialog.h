@@ -19,10 +19,12 @@ public:
     ~GoalDetection_Dialog();
 signals:
        void returnSignal(int);
-       //void send_DetectObject(int);
+       void send_RobotMode(int);
 private slots:
        void on_returnBtn_clicked();
        void on_comboBox_currentIndexChanged(int index);
+
+       void on_SetBtn_clicked();
 
 public:
        RoadRobotModeSetWidget *m_roadRobot;

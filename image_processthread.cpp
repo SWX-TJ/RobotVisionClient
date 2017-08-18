@@ -60,6 +60,11 @@ void Image_processThread::accept_AutoWhiteBalance()
     AutoWhiteBalance = true;
 }
 
+void Image_processThread::accept_RobotMode(int robotMode)
+{
+
+}
+
 QImage Image_processThread::convertMatToQImage(Mat &mat)
 {
     QImage img;
