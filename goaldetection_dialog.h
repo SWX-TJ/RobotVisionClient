@@ -23,7 +23,6 @@ signals:
 private slots:
        void on_returnBtn_clicked();
        void on_comboBox_currentIndexChanged(int index);
-
        void on_SetBtn_clicked();
 
 public:

@@ -8,6 +8,11 @@
 #define LEFT_CAMERA  1
 #define RIGHT_CAMERA 2
 #define ALL_CAMERA   3
+enum RobotMode
+{
+    Road_RobotMode=1,
+    Basket_RobotMode
+};
 using namespace cv;
 class Image_processThread : public QThread
 {
@@ -26,6 +31,7 @@ public:
    int Bright_Gen;
    int ostu_threshlodValue;//自适应阈值
    bool AutoWhiteBalance;
+   enum RobotMode robotmode;
    VideoCapture *m_leftCamera;
    VideoCapture *m_RightCamera;
    QImage left_frame;

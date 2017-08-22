@@ -62,7 +62,17 @@ void Image_processThread::accept_AutoWhiteBalance()
 
 void Image_processThread::accept_RobotMode(int robotMode)
 {
-
+    qDebug()<<"机器人模式"<<robotMode<<endl;
+    switch (robotMode) {
+    case 1:
+         robotmode = Road_RobotMode;
+        break;
+    case 2:
+        robotmode = Basket_RobotMode;
+        break;
+    default:
+        break;
+    }
 }
 
 QImage Image_processThread::convertMatToQImage(Mat &mat)
@@ -162,7 +172,7 @@ void Image_processThread::PaintHist(Mat &gray_frame)
     const float *ranges[] = { hranges };
     int size = 256;
     int channels = 0;
-     calcHist(&gray_frame,1,&channels,Mat(),dsthist,dims,&size,ranges);
+    calcHist(&gray_frame,1,&channels,Mat(),dsthist,dims,&size,ranges);
     int scale = 1;
     Mat hist_frame(size* scale,size,CV_8U,Scalar(0));
     double minValue = 0;
@@ -188,7 +198,7 @@ Mat Image_processThread::LineDetect(Mat &binary_frame,Mat &bilater_frame)
         for (size_t i = 0; i < lines.size(); i++)
         {
             Vec4i l = lines[i];
-            line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
+             line(bilater_frame,Point(l[0],l[1]),Point(l[2],l[3]),Scalar(0, 255, 0),9,LINE_AA);
         }
         return bilater_frame;
 }
@@ -229,8 +239,15 @@ void Image_processThread::run()
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
                 //阈值灰度二值化处理
                 binary_frame = ThresholdProcess(bilater_frame);
-                //直线检测
-                bilater_frame = LineDetect(binary_frame,bilater_frame);
+                switch (robotmode) {
+                case Road_RobotMode:
+                    //直线检测
+                    bilater_frame = LineDetect(binary_frame,bilater_frame);
+                    break;
+                default:
+                    break;
+                }
+
                 /**/
                 /**********/
                 //TODO opencv to qt显示
@@ -245,6 +262,15 @@ void Image_processThread::run()
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
+                vector<vector<Point>> contours;
+                vector<Vec4i>hierarchy;
+                findContours(binary_frame,contours,hierarchy,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_SIMPLE);
+                int index = 0;
+                for(;index>=0;index=hierarchy[index][0])
+                {
+                    Scalar color(rand()&255,rand()&255,rand()&255);
+                    drawContours(bilater_frame,contours,index,color,FILLED,8,hierarchy);
+                }
 
                 /**********/
                 imshow("left_video",bilater_frame);
@@ -279,8 +305,14 @@ void Image_processThread::run()
                 bilateralFilter(preset_frame,bilater_frame,10,10*2,10/2);
                //阈值灰度二值化处理
                 binary_frame = ThresholdProcess(bilater_frame);
-                //直线检测
-                bilater_frame = LineDetect(binary_frame,bilater_frame);
+                switch (robotmode) {
+                case Road_RobotMode:
+                    //直线检测
+                    bilater_frame = LineDetect(binary_frame,bilater_frame);
+                    break;
+                default:
+                    break;
+                }
                 /**/
                 /**********/
                 //TODO opencv to qt显示
@@ -295,6 +327,7 @@ void Image_processThread::run()
                 /**********/
                 /**********/
                 //TODO 图像测试处理区域
+
                 /**********/
                 imshow("left_video",bilater_frame);
                 waitKey(30);

@@ -12,6 +12,7 @@ GoalDetection_Dialog::GoalDetection_Dialog(QWidget *parent) :
     m_roadRobot = new RoadRobotModeSetWidget;
     ui->verticalLayout->addWidget(m_roadRobot);
     currentWidget = m_roadRobot->objectName();
+    RobotMode = Mode_RoadRobot;
 }
 
 GoalDetection_Dialog::~GoalDetection_Dialog()
@@ -33,6 +34,7 @@ void GoalDetection_Dialog::on_comboBox_currentIndexChanged(int index)
          returnCurrentWidget(currentWidget)->close();
         m_roadRobot = new RoadRobotModeSetWidget;
         RobotMode = Mode_RoadRobot;
+        //send_RobotMode(RobotMode);
         ui->verticalLayout->addWidget(m_roadRobot);
          currentWidget = m_roadRobot->objectName();
         break;
@@ -41,6 +43,7 @@ void GoalDetection_Dialog::on_comboBox_currentIndexChanged(int index)
         returnCurrentWidget(currentWidget)->close();
         m_basketBallRobot = new BasketBallRobotModeSetWidget;
         RobotMode = Mode_BastBallRobot;
+        //send_RobotMode(RobotMode);
         ui->verticalLayout->addWidget(m_basketBallRobot);
         currentWidget = m_basketBallRobot->objectName();
         break;
@@ -64,5 +67,6 @@ QWidget* GoalDetection_Dialog::returnCurrentWidget(QString currentWidgetName)
 
 void GoalDetection_Dialog::on_SetBtn_clicked()
 {
-    emit send_RobotMode(RobotMode);
+    qDebug()<<"ori_mode"<<RobotMode<<endl;
+     send_RobotMode(RobotMode);
 }
