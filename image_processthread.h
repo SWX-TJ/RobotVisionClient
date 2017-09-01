@@ -5,9 +5,13 @@
 #include <QImage>
 #include <opencv.hpp>
 #include <vector>
+#include <QMutex>
+#include <QMutexLocker>
 #define LEFT_CAMERA  1
 #define RIGHT_CAMERA 2
 #define ALL_CAMERA   3
+#define CAMERA_OPEN  4
+#define CAMERA_CLOSE  5
 enum RobotMode
 {
     Road_RobotMode=1,
@@ -31,11 +35,14 @@ public:
    int Bright_Gen;
    int ostu_threshlodValue;//自适应阈值
    bool AutoWhiteBalance;
+   int leftCameraStatus;
+   bool  rightCameraStatus;
    enum RobotMode robotmode;
    VideoCapture *m_leftCamera;
    VideoCapture *m_RightCamera;
    QImage left_frame;
    QImage right_frame;
+   QMutex m_lock;
 signals:
    void imageCapturesignal();
    void send_leftdispframe(QImage);
@@ -45,13 +52,13 @@ public slots:
    void accept_leftdeviceIndex(int index);
    void accept_rightdeviceIndex(int index);
    void accept_deviceNum(int);
-   void accept_closeLeftCamera();
    void accept_closeRightCamera();
    void accept_RGBGen(int,int,int);
    void accept_ContrastBrightGen(int,int);
    void accept_AutoWhiteBalance();
    void accept_RobotMode(int);
 public:
+   void accept_closeLeftCamera();
    QImage convertMatToQImage(Mat &mat);
    Mat    contrastAndBrightSet(Mat &frame,int contrastValue,int BrightValue);
    int    OSTU_Threshold(Mat &frame);//OSUT找全局最优阈值为后面的二值化处理做预备

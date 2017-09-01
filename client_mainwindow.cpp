@@ -20,7 +20,7 @@ Client_mainwindow::Client_mainwindow(QWidget *parent) :
     connect(m_pictureSet,SIGNAL(returnSignal(int)),this,SLOT(shutSlaveWindowSlot(int)));
     connect(m_goalDetect,SIGNAL(returnSignal(int)),this,SLOT(shutSlaveWindowSlot(int)));
     connect(m_goalDetect,SIGNAL(send_RobotMode(int)),m_image_thread,SLOT(accept_RobotMode(int)));
-    connect(this,SIGNAL(close_leftCamera()),m_image_thread,SLOT(accept_closeLeftCamera()));
+    //connect(this,SIGNAL(close_leftCamera()),m_image_thread,SLOT(accept_closeLeftCamera()));
     connect(this,SIGNAL(close_rightCamera()),m_image_thread,SLOT(accept_closeRightCamera()));
     connect(m_image_thread,SIGNAL(send_alldispframe(QImage,QImage)),this,SLOT(accept_alldispFrame(QImage,QImage)));
     connect(m_image_thread,SIGNAL(send_leftdispframe(QImage)),this,SLOT(accept_leftdispFrame(QImage)));
@@ -86,7 +86,6 @@ void Client_mainwindow::on_openCamera_btn_clicked()
         switch (UseWhichCamera) {
         case LEFT_CAMERA:
             m_image_thread->start();
-
             ui->openCamera_btn->setText("关闭视觉");
             break;
         case RIGHT_CAMERA:
@@ -108,9 +107,8 @@ void Client_mainwindow::on_openCamera_btn_clicked()
     {
         switch (UseWhichCamera) {
         case LEFT_CAMERA:
-            emit close_leftCamera();
-            m_image_thread->terminate();
-            m_image_thread->wait();
+            //emit close_leftCamera();
+            m_image_thread->accept_closeLeftCamera();
             ui->openCamera_btn->setText("加载视觉");
             break;
         case RIGHT_CAMERA:
