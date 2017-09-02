@@ -216,6 +216,46 @@ Mat Image_processThread::ThresholdProcess(Mat &bilater_frame)
     threshold(gray_frame,binary_frame,ostu_threshlodValue,255,THRESH_BINARY);
     return binary_frame;
 }
+//导向滤波
+Mat Image_processThread::guidedfilter(Mat &srcImage, Mat &srcClone, int r, double eps)
+{
+    srcImage.convertTo(srcImage,CV_64FC1);
+        srcClone.convertTo(srcClone, CV_64FC1);
+        int nRows = srcImage.rows;
+        int nCols = srcImage.cols;
+        Mat boxResult;
+        //1.计算均值
+        boxFilter(Mat::ones(nRows,nCols,srcImage.type),boxResult,CV_64FC1,Size(r,r));
+        //2 生成导向均值mean_I
+        Mat mean_I;
+        boxFilter(srcImage, mean_I, CV_64FC1, Size(r, r));
+        //3 生成原始均值mean_P
+        Mat mean_P;
+        boxFilter(srcClone,mean_P,CV_64FC1,Size(r,r));
+        //4 生成互相关均值mean_IP
+        Mat mean_IP;
+        boxFilter(srcImage.mul(srcClone),mean_IP,CV_64FC1,Size(r,r));
+        Mat cov_IP = mean_IP - mean_I.mul(mean_P);
+        //5 生成自相关均值mean_II
+        Mat mean_II;
+        boxFilter(srcImage.mul(srcImage),mean_II,CV_64FC1,Size(r,r));
+        //6 计算相关系数
+        Mat var_I = mean_II - mean_I.mul(mean_I);
+        Mat var_II = mean_IP - mean_I.mul(mean_P);
+        //7 计算参数系数a,b
+        Mat a = cov_IP / (var_I + eps);
+        Mat b = mean_P - a.mul(mean_I);
+        //8 计算参数系数a,b的均值
+        Mat mean_a;
+        boxFilter(a,mean_a,CV_64FC1,Size(r,r));
+        mean_a = mean_a / boxResult;
+        Mat mean_b;
+        boxFilter(b,mean_b,CV_64FC1,Size(r,r));
+        mean_b = mean_b / boxResult;
+        //9 生成输出矩阵
+        Mat resultMat = mean_a.mul(srcImage) + mean_b;
+        return resultMat;
+}
 
 
 
